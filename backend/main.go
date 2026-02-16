@@ -58,7 +58,7 @@ func main() {
 
 	r := mux.NewRouter()
 	routes.RegisterProjectRoutes(r)
-	spa := clientHandler{staticPath: "../portfolio/build", indexPath: "index.html"}
+	spa := clientHandler{staticPath: "../frontend/projects/dist", indexPath: "index.html"}
 	r.PathPrefix("/").Handler(spa)
 	http.Handle("/", r)
 	fmt.Printf("Starting server at port 8080")
