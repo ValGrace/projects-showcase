@@ -2,8 +2,9 @@ package models
 
 import (
 	"github.com/ValGrace/projects-showcase/src/pkg/config"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/gorm"
+	// "github.com/jinzhu/gorm"
+	// _ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var db *gorm.DB
@@ -24,13 +25,14 @@ type Project struct {
 func init() {
 	config.Connect()
 	db = config.GetDB()
+	println(db)
 	db.AutoMigrate(&Project{})
 	db.AutoMigrate(&User{})
 
 }
 
 func (b *Project) CreateProject() *Project {
-	db.NewRecord(b)
+	// db.NewRecord(b)
 	db.Create(&b)
 	return b
 }

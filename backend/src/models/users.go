@@ -3,8 +3,7 @@ package models
 import (
 	// "github.com/ValGrace/portfolio-server/src/pkg/config"
 	// "github.com/jinzhu/gorm"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -13,11 +12,12 @@ type User struct {
 	Email    string `gorm:"size:255"`
 	Level    string `gorm:"size:255"`
 	Password string `gorm:"size:255"`
+	RoleID   uint
 	Projects []Project
 }
 
 func (usr *User) CreateUser() *User {
-	db.NewRecord(usr)
+
 	db.Create(&usr)
 	return usr
 }
@@ -43,5 +43,18 @@ func GetUserById(id int64) (*User, *gorm.DB) {
 func DeleteUser(ID int64) User {
 	var user User
 	db.Where("UserID=?", ID).Delete(user)
+	return user
+}
+
+func UpdateUser(User *User) {
+	db.Omit("password").Updates(User)
+
+	return
+}
+
+func GetUserByUsername(uname string) User {
+	var user User
+	db.Where("name=?", uname).Find(&user)
+
 	return user
 }
