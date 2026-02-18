@@ -3,6 +3,7 @@ package models
 import (
 	// "github.com/ValGrace/portfolio-server/src/pkg/config"
 	// "github.com/jinzhu/gorm"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -20,6 +21,14 @@ func (usr *User) CreateUser() *User {
 
 	db.Create(&usr)
 	return usr
+}
+
+func (usr *User) HashPass(*gorm.DB) error {
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(usr.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	usr.Password = string(passwordHash)
 }
 
 func GetAllUsers() []User {
