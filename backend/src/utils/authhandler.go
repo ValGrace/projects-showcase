@@ -19,8 +19,8 @@ func Authenticate(w http.ResponseWriter, r *http.Request, user interface{}) {
 		w.Write([]byte("Username and password are required"))
 		return
 	}
-	userMux.Lock()
-	defer userMux.Unlock()
+	// userMux.Lock()
+	// defer userMux.Unlock()
 	token, err := getToken(name)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

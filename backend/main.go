@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/ValGrace/projects-showcase/src/pkg/config"
 	"github.com/ValGrace/projects-showcase/src/routes"
 	"github.com/gorilla/mux"
 )
@@ -46,6 +47,7 @@ func envPortOr(port string) string {
 func main() {
 
 	r := mux.NewRouter()
+	config.ConnectDatabase()
 	routes.RegisterProjectRoutes(r)
 	spa := clientHandler{staticPath: "../frontend/projects/dist", indexPath: "index.html"}
 	r.PathPrefix("/").Handler(spa)

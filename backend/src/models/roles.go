@@ -17,8 +17,12 @@ func GetAllRoles(roles *[]Role) {
 	db.Find(roles)
 }
 
-func GetRoleByID(id uint, role *Role) {
-	db.Where("id = ?", id).First(role)
+func GetRoleByID(id uint, role *Role) (err error) {
+	err = db.Where("id = ?", id).First(role).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func UpdateRole(role *Role) {
