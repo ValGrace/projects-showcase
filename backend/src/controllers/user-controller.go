@@ -40,7 +40,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func CreateUser(w http.ResponseWriter, r *http.Request) {
+func Register(w http.ResponseWriter, r *http.Request) {
 	CreateUser := &models.User{}
 
 	utils.Authenticate(w, r, CreateUser)
@@ -56,9 +56,29 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("success --------")
+	fmt.Println("successful signup --------")
 }
 
+func Login(w http.ResponseWriter, r *http.Request) {
+	LoginUser := &models.Login{}
+
+	utils.Authenticate(w, r, LoginUser)
+	user, err := models.GetUserByUsername(LoginUser.Username)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	err = user.VerifyPassword(LoginUser.Password)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("err: " + err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	res, _ := json.Marshal(user)
+	w.Write(res)
+
+}
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userId := vars["userId"]

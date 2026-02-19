@@ -3,9 +3,12 @@ package utils
 import (
 	"net/http"
 	"strings"
+	"sync"
 
 	"github.com/dgrijalva/jwt-go"
 )
+
+var userMux sync.Mutex
 
 func Authenticate(w http.ResponseWriter, r *http.Request, user interface{}) {
 	name := r.FormValue("username")
@@ -16,6 +19,8 @@ func Authenticate(w http.ResponseWriter, r *http.Request, user interface{}) {
 		w.Write([]byte("Username and password are required"))
 		return
 	}
+	userMux.Lock()
+	defer userMux.Unlock()
 	token, err := getToken(name)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

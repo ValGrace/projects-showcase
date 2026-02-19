@@ -66,9 +66,12 @@ func UpdateUser(User *User) {
 	return
 }
 
-func GetUserByUsername(uname string) User {
+func GetUserByUsername(uname string) (User, error) {
 	var user User
-	db.Where("name=?", uname).Find(&user)
+	err := db.Where("name=?", uname).Find(&user).Error
 
-	return user
+	if err != nil {
+		return User{}, err
+	}
+	return user, err
 }
