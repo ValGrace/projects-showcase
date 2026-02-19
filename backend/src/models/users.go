@@ -11,10 +11,10 @@ type User struct {
 	UserID   uint   `gorm:"primary_key"`
 	Name     string `gorm:"size:255"`
 	Email    string `gorm:"size:255"`
-	Level    string `gorm:"size:255"`
 	Password string `gorm:"size:255"`
 	RoleID   uint
-	Projects []Project
+	Role     Role      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"-"`
+	Projects []Project `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"projects"`
 }
 
 func (usr *User) CreateUser() *User {

@@ -90,15 +90,6 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if updateUser.Email != "" {
 		userDetails.Email = updateUser.Email
 	}
-	if updateUser.Level != "" {
-		userDetails.Level = updateUser.Level
-	}
-	// if updateUser.Photo != []byte {
-	// 	userDetails.Photo = updateUser.Photo
-	// }
-	// if updateUser.Tech != []string {
-	// 	userDetails.Tech = updateUser.Tech
-	// }
 
 	db.Save(&userDetails)
 	res, _ := json.Marshal(userDetails)
