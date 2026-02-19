@@ -29,6 +29,11 @@ func (usr *User) HashPass(*gorm.DB) error {
 		return err
 	}
 	usr.Password = string(passwordHash)
+	return nil
+}
+
+func (usr *User) VerifyPassword(password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(password))
 }
 
 func GetAllUsers() []User {

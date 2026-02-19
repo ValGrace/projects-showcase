@@ -32,17 +32,6 @@ func (h clientHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	path = filepath.Join(h.staticPath, path)
 
-	// _, err = os.Stat(path)
-
-	// if os.IsNotExist(err) {
-	// 	http.ServeFile(w, r, filepath.Join(h.staticPath, h.indexPath))
-	// 	return
-	// } else if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-
-	// 	return
-	// }
-
 	http.FileServer(http.Dir(h.staticPath)).ServeHTTP(w, r)
 
 }
@@ -61,9 +50,9 @@ func main() {
 	spa := clientHandler{staticPath: "../frontend/projects/dist", indexPath: "index.html"}
 	r.PathPrefix("/").Handler(spa)
 	http.Handle("/", r)
-	fmt.Printf("Starting server at port 8080")
+	fmt.Printf("Starting server at port 3000")
 
-	r.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(http.Dir("../portfolio/build/static"))))
+	r.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(http.Dir("../frontend/projects/dist/assets"))))
 	port := envPortOr("3000")
 	log.Fatal(http.ListenAndServe(port, r))
 }
