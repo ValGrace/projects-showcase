@@ -6,13 +6,13 @@ require (
 	github.com/cloudinary/cloudinary-go/v2 v2.14.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gorilla/mux v1.8.1
-	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	golang.org/x/crypto v0.45.0
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gorm v1.31.1
 )
 
 require (
-	filippo.io/edwards25519 v1.1.0 // indirect
+	filippo.io/edwards25519 v1.1.1 // indirect
 	github.com/creasty/defaults v1.7.0 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/google/uuid v1.5.0 // indirect
