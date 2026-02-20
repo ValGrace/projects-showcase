@@ -17,6 +17,7 @@ type Project struct {
 	Solution    string `gorm:"solution"`
 	Tech        string `gorm:"tech"`
 	UserID      uint
+	User        User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"-"`
 }
 
 func (b *Project) CreateProject() *Project {

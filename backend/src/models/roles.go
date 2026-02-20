@@ -1,16 +1,28 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"context"
+	"fmt"
+
+	"gorm.io/gorm"
+)
 
 type Role struct {
-	gorm.Model
+	*gorm.Model
 	ID          uint   `gorm:"primaryKey"`
 	Name        string `gorm:"size:255;not null;unique" json:"name"`
 	Description string `gorm:"size:255;not null" json:"description"`
 }
 
-func CreateRole(role *Role) {
-	db.Create(role)
+func CreateRole(role *Role) (*Role, error) {
+	ctx := context.Background()
+
+	result := gorm.WithResult()
+	gorm.G[Role](db, result).Create(ctx, role)
+
+	fmt.Println("Role creation result:", role.ID)
+	// db.Create(role)
+	return role, nil
 }
 
 func GetAllRoles(roles *[]Role) {

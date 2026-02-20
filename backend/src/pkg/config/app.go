@@ -19,11 +19,12 @@ func Connect() *gorm.DB {
 		panic(err)
 	}
 	println("Connection to database successful!!!☁️")
-	return d
+	db = d
+	return db
 }
 
 func GetDB() *gorm.DB {
-	db = Connect()
+	// db = Connect()
 	return db
 }
 
@@ -31,13 +32,18 @@ func ConnectDatabase() {
 	Connect()
 	db = GetDB()
 	println(db)
-	db.AutoMigrate(&models.Project{}, &models.User{}, &models.Role{})
+	err := db.AutoMigrate(&models.Project{}, &models.User{}, &models.Role{})
+	if err != nil {
+		panic(err)
+	}
 	Seeding()
 }
 
 func Seeding() {
 	var user = []models.User{{Name: os.Getenv("ADMIN_USERNAME"), Email: os.Getenv("ADMIN_EMAIL"), Password: os.Getenv("ADMIN_PASSWORD"), RoleID: 1, Projects: []models.Project{}}}
-	var roles = []models.Role{{Name: "Admin", Description: "Admin has all the access"}, {Name: "User", Description: "User can only view the projects"}, {Name: "Anonymous", Description: "Unregistered user can only view the projects"}}
+	var roles = []models.Role{{Name: "admin", Description: "Admin has all the access"}, {Name: "User", Description: "User can only view the projects"}, {Name: "Anonymous", Description: "Unregistered user can only view the projects"}}
+	// models.CreateRole(&roles[0])
+	// (*models.User).CreateUser(&user[0])
 	db.Save(&roles)
 	db.Save(&user)
 }

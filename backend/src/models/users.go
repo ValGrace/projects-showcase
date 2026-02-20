@@ -1,25 +1,32 @@
 package models
 
 import (
-	// "github.com/ValGrace/portfolio-server/src/pkg/config"
-	// "github.com/jinzhu/gorm"
+	"context"
+	"fmt"
+
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	UserID   uint   `gorm:"primary_key"`
+	*gorm.Model
+	ID       uint   `gorm:"primary_key"`
 	Name     string `gorm:"size:255"`
 	Email    string `gorm:"size:255"`
 	Password string `gorm:"size:255"`
 	RoleID   uint
 	Role     Role      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"-"`
-	Projects []Project `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"projects"`
+	Projects []Project `gorm:"foreignKey:UserID"`
 }
 
 func (usr *User) CreateUser() *User {
+	ctx := context.Background()
 
-	db.Create(&usr)
+	result := gorm.WithResult()
+	gorm.G[User](db, result).Create(ctx, usr)
+
+	fmt.Println("User creation result:", usr.ID)
+
 	return usr
 }
 
@@ -63,7 +70,6 @@ func DeleteUser(ID int64) User {
 func UpdateUser(User *User) {
 	db.Omit("password").Updates(User)
 
-	return
 }
 
 func GetUserByUsername(uname string) (User, error) {
